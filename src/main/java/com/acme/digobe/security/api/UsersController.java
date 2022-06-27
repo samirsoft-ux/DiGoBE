@@ -5,6 +5,7 @@ import com.acme.digobe.security.domain.service.communication.AuthenticateRequest
 import com.acme.digobe.security.domain.service.communication.RegisterRequest;
 import com.acme.digobe.security.mapping.UserMapper;
 import com.acme.digobe.security.resource.UserResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
@@ -32,17 +33,20 @@ public class UsersController {
     }
 
     @PostMapping("/auth/sign-in")
+    @Operation(summary = "Authenticate user")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticateRequest request) {
         return userService.authenticate(request);
     }
 
     @PostMapping("/auth/sign-up")
+    @Operation(summary = "Register user")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request) {
         return userService.register(request);
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get all users")
     public ResponseEntity<?> getAllUsers(Pageable pageable) {
         Page<UserResource> resources = mapper.modelListToPage(userService.getAll(), pageable);
         return ResponseEntity.ok(resources);
